@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 CURRENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 source ${CURRENT_DIR}/../common/common.sh
@@ -31,14 +30,11 @@ function init_alias {
 function init_repositories {
     add-apt-repository -y ppa:ondrej/php
     add-apt-repository -y ppa:nginx/stable
-    grep -rl ppa.launchpad.net /etc/apt/sources.list.d/ | xargs sed -i 's/ppa.launchpad.net/launchpad.proxy.ustclug.org/g'
 
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
 
     curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
-    echo 'deb https://mirrors.tuna.tsinghua.edu.cn/nodesource/deb_8.x xenial main' > /etc/apt/sources.list.d/nodesource.list
-    echo 'deb-src https://mirrors.tuna.tsinghua.edu.cn/nodesource/deb_8.x xenial main' >> /etc/apt/sources.list.d/nodesource.list
 
     apt-get update
 }
@@ -49,7 +45,7 @@ function install_basic_softwares {
 
 function install_node_yarn {
     apt-get install -y nodejs yarn
-    sudo -H -u ${WWW_USER} sh -c 'cd ~ && yarn config set registry https://registry.npm.taobao.org'
+    sudo -H -u ${WWW_USER} sh -c 'cd ~'
 }
 
 function install_php {
@@ -68,7 +64,7 @@ function install_others {
 function install_composer {
     wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer
     chmod +x /usr/local/bin/composer
-    sudo -H -u ${WWW_USER} sh -c  'cd ~ && composer config -g repo.packagist composer https://packagist.laravel-china.org'
+    sudo -H -u ${WWW_USER} sh -c  'cd ~'
 }
 
 call_function init_system "正在初始化系统" ${LOG_PATH}
